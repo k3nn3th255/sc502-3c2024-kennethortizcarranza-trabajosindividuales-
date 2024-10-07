@@ -13,28 +13,44 @@
     <p>Please fill out this form with the required information</p>
     <form action="https://register-demo.freecodecamp.org" method="post">
 
-        <fieldset>
-            <label for="first-name">Enter Your First Name:</label>
-            <input id="first-name" type="text" />
+        <<form>
+            <fieldset>
+                <label for="first-name">Enter Your First Name:</label>
+                <input id="first-name" type="text" required />
         
-            <label for="last-name">Enter Your Last Name:</label>
-            <input id="last-name" type="text" />
+                <label for="last-name">Enter Your Last Name:</label>
+                <input id="last-name" type="text" required />
         
-            <label for="email">Enter Your Email:</label>
-            <input id="email" type="email" />
+                <label for="email">Enter Your Email:</label>
+                <input id="email" type="email" required />
         
-            <label for="new-password">Create a New Password:</label>
-            <input id="new-password" type="password" />
-        </fieldset>
+                <label for="new-password">Create a New Password:</label>
+                <input id="new-password" type="password" required pattern="[a-z0-5]{8,}" />
+            </fieldset>
+        
+            <fieldset>
+                <legend>Account type (required)</legend> <!-- Agregado legend -->
+                <label for="account-type-personal">
+                    <input id="account-type-personal" type="radio" name="account-type" value="personal" checked />
+                    Personal
+                </label>
+        
+                <label for="account-type-business">
+                    <input id="account-type-business" type="radio" name="account-type" value="business" />
+                    Business
+                </label>
+            </fieldset>
+        
+            <fieldset>
+                <!-- Puedes agregar más contenido aquí si lo necesitas -->
+            </fieldset>
+        
+            <input type="submit" value="Submit" />
+        </form>
         
         
-          
-
-        <fieldset>
-        </fieldset>
-
-        <fieldset>
-        </fieldset>
+        
+        
     </form>
 
 </body>
