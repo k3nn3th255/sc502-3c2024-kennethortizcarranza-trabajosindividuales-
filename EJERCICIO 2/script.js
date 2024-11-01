@@ -27,3 +27,5 @@ function getAverage(scores) {
   function hasPassingGrade(score) {
     return getGrade(score) !== "F";
   }
+
+  
