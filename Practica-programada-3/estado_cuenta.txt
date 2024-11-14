@@ -1,0 +1,11 @@
+=== Estado de Cuenta ===
+ID: 1 - Descripción: Compra en supermercado - Monto: ₡10000
+ID: 2 - Descripción: Cena en restaurante - Monto: ₡25000
+ID: 3 - Descripción: Gasolina - Monto: ₡15000
+ID: 4 - Descripción: Compra en línea - Monto: ₡5000
+ID: 5 - Descripción: Pago de servicios - Monto: ₡8000
+
+Monto Total de Contado: ₡63,000.00
+Monto Total con Interés (2.6%): ₡64,638.00
+Cashback (0.1%): ₡63.00
+Monto Final a Pagar: ₡64,575.00
