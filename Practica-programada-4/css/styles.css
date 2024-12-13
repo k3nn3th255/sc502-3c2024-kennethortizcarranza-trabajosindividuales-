@@ -1,0 +1,43 @@
+body {
+    background-color: #343a40;
+    /* Color de fondo oscuro */
+    color: white;
+    /* Color de texto blanco */
+}
+
+.card {
+    background-color: #495057;
+    /* Fondo de tarjeta oscuro */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    /* Color del botón primario */
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    /* Color del botón secundario */
+}
+
+.form-control {
+    background-color: #6c757d;
+    /* Fondo de los campos de formulario */
+    color: white;
+    /* Color del texto en los campos */
+}
+
+.bg-secondary {
+    background-color: #6c757d !important;
+    /* Color de fondo gris oscuro */
+}
+
+.text-white {
+    color: white !important;
+    /* Color del texto blanco */
+}
+
+.list-group-item {
+    border: none;
+    /* Quitar borde si es necesario */
+}

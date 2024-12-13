@@ -27,42 +27,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderTasks(tasks) {
-        //traer las tareas desde el backend
         const taskList = document.getElementById('task-list');
         taskList.innerHTML = '';
         tasks.forEach(function (task) {
-
             let commentsList = '';
             if (task.comments && task.comments.length > 0) {
                 commentsList = '<ul class="list-group list-group-flush">';
                 task.comments.forEach(comment => {
-                    commentsList += `<li class="list-group-item">${comment.description} 
-                    <button type="button" class="btn btn-sm btn-link remove-comment" data-visitid="${task.id}" data-commentid="${comment.id}">Remove</button>
-                    </li>`;
+                    commentsList += `
+                <li class="list-group-item bg-secondary text-white">
+                    ${comment.description} 
+                    <button type="button" class="btn btn-warning btn-sm edit-comment" data-commentid="${comment.id}">Editar</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-comment" data-commentid="${comment.id}">Eliminar</button>
+                </li>`;
                 });
                 commentsList += '</ul>';
             }
+
             const taskCard = document.createElement('div');
             taskCard.className = 'col-md-4 mb-3';
             taskCard.innerHTML = `
-            <div class="card">
+            <div class="card bg-dark text-white">
                 <div class="card-body">
                     <h5 class="card-title">${task.title}</h5>
                     <p class="card-text">${task.description}</p>
-                    <p class="card-text"><small class="text-muted">Due: ${task.due_date}</small> </p>
+                    <p class="card-text"><small class="text-muted">Due: ${task.due_date}</small></p>
                     ${commentsList}
-                     <button type="button" class="btn btn-sm btn-link add-comment"  data-id="${task.id}">Add Comment</button>
-
+                    <button type="button" class="btn btn-primary add-comment" data-id="${task.id}">Agregar Comentario</button>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <button class="btn btn-secondary btn-sm edit-task"data-id="${task.id}">Edit</button>
-                    <button class="btn btn-danger btn-sm delete-task" data-id="${task.id}">Delete</button>
+                    <button class="btn btn-secondary btn-sm edit-task" data-id="${task.id}">Editar</button>
+                    <button class="btn btn-danger btn-sm delete-task" data-id="${task.id}">Eliminar</button>
                 </div>
-            </div>
-            `;
+            </div>`;
+
             taskList.appendChild(taskCard);
         });
 
+        // Añadir manejadores de eventos para editar, eliminar y agregar comentarios
         document.querySelectorAll('.edit-task').forEach(function (button) {
             button.addEventListener('click', handleEditTask);
         });
@@ -73,22 +75,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelectorAll('.add-comment').forEach(function (button) {
             button.addEventListener('click', function (e) {
-                // alert(e.target.dataset.id);
                 document.getElementById("comment-task-id").value = e.target.dataset.id;
                 const modal = new bootstrap.Modal(document.getElementById("commentModal"));
-                modal.show()
-
-            })
+                modal.show();
+            });
         });
+
         document.querySelectorAll('.remove-comment').forEach(function (button) {
-            button.addEventListener('click', function (e) {
+            button.addEventListener('click', async function (e) {
                 let taskId = parseInt(e.target.dataset.visitid);
                 let commentId = parseInt(e.target.dataset.commentid);
-                selectedTask = tasks.find(t => t.id === taskId);
-                commentIndex = selectedTask.comments.findIndex(c => c.id === commentId);
-                selectedTask.comments.splice(commentIndex, 1);
-                loadTasks();
-            })
+
+                const response = await fetch(`${API_URL_COMMENTS}?id=${commentId}`, { method: 'DELETE', credentials: 'include' });
+
+                if (response.ok) {
+                    loadTasks(); // Recargar tareas y comentarios
+                } else {
+                    console.error("Error al eliminar el comentario");
+                }
+            });
         });
     }
 
@@ -119,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function handleDeleteTask(event) {
         const id = parseInt(event.target.dataset.id);
-        const response = await fetch(`${API_URL}?id=${id}`,{
+        const response = await fetch(`${API_URL}?id=${id}`, {
             method: 'DELETE',
             credentials: 'include'
         });
