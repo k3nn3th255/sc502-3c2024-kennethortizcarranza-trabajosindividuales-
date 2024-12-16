@@ -47,10 +47,37 @@ function obtenerTareasPorUsuario($user_id)
 {
     global $pdo;
     try {
-        $sql = "Select * from tasks where user_id = :user_id";
+        // Consulta para obtener tareas y sus comentarios
+        $sql = "
+            SELECT t.*, c.id AS comment_id, c.description AS comment_description
+            FROM tasks t
+            LEFT JOIN comments c ON t.id = c.task_id
+            WHERE t.user_id = :user_id
+        ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['user_id' => $user_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $tareas = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $taskId = $row['id'];
+            if (!isset($tareas[$taskId])) {
+                $tareas[$taskId] = [
+                    'id' => $taskId,
+                    'title' => $row['title'],
+                    'description' => $row['description'],
+                    'due_date' => $row['due_date'],
+                    'comments' => []
+                ];
+            }
+            if ($row['comment_id']) {
+                $tareas[$taskId]['comments'][] = [
+                    'id' => $row['comment_id'],
+                    'description' => $row['comment_description']
+                ];
+            }
+        }
+
+        return array_values($tareas); // Retorna un array de tareas sin índices
     } catch (Exception $e) {
         logError("Error al obtener tareas: " . $e->getMessage());
         return [];
@@ -65,7 +92,7 @@ function eliminarTarea($id)
         $sql = "delete from tasks where id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
-        return $stmt->rowCount() > 0;// true si se elimina algo
+        return $stmt->rowCount() > 0; // true si se elimina algo
     } catch (Exception $e) {
         logError("Error al eliminar la tareas: " . $e->getMessage());
         return false;
@@ -138,7 +165,6 @@ if (isset($_SESSION['user_id'])) {
                     http_response_code(500);
                     echo json_encode(['message' => 'Sucedio un error al eliminar la tarea']);
                 }
-
             } else {
                 //retornar un error
                 http_response_code(400);
@@ -151,7 +177,6 @@ if (isset($_SESSION['user_id'])) {
             echo json_encode(["error" => "Metodo no permitido"]);
             break;
     }
-
 } else {
     http_response_code(401);
     echo json_encode(["error" => "Sesion no activa"]);

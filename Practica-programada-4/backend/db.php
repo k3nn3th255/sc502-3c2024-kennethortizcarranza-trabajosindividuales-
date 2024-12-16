@@ -2,9 +2,9 @@
 require "message_log.php";
 
 $host = getenv('DB_HOST') !== false ? getenv('DB_HOST') : 'localhost';
-$dbname = getenv('DB_NAME') !== false ? getenv('DB_NAME') : 'todo_app';
-$user = getenv('DB_USER') !== false ? getenv('DB_USER') : 'dbuser';
-$password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : 'mysqlpass';
+$dbname = getenv('DB_NAME') !== false ? getenv('DB_NAME') : 'app_tareas';
+$user = getenv('DB_USER') !== false ? getenv('DB_USER') : 'root';
+$password = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '123mysql';
 
 try{
 
@@ -16,4 +16,4 @@ try{
 }catch(PDOException $e){
     logError($e -> getMessage());
     die("Error de conexion: " . $e -> getMessage());
-}
+} 
